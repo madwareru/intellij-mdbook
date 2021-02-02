@@ -1,19 +1,27 @@
 <idea-plugin>
     <id>com.github.madwareru.intellijmdbook</id>
-    <name>intellij-mdbook</name>
+    <name>MdBook</name>
     <vendor>madwareru</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>org.toml.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.madwareru.intellijmdbook.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.madwareru.intellijmdbook.services.MyProjectService"/>
-    </extensions>
+        <!-- Project -->
+        <projectOpenProcessor id="MdBook" implementation="com.github.madwareru.intellijmdbook.project.MdBookProjectOpenProcessor"/>
+        <generatedSourcesFilter implementation="com.github.madwareru.intellijmdbook.project.MdBookGeneratedSourcesFilter" />
+        <writingAccessProvider implementation="com.github.madwareru.intellijmdbook.project.MdBookWritingAccessProvider"/>
+        <treeStructureProvider implementation="com.github.madwareru.intellijmdbook.project.MdBookTreeStructureProvider"/>
 
-    <applicationListeners>
-        <listener class="com.github.madwareru.intellijmdbook.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+        <!-- Run configuration -->
+        <configurationType implementation="com.github.madwareru.intellijmdbook.runconfigurations.MdBookCommandConfigurationType"/>
+
+        <!-- Services -->
+        <projectService
+                serviceInterface="com.github.madwareru.intellijmdbook.project.services.MdBookProjectService"
+                serviceImplementation="com.github.madwareru.intellijmdbook.project.services.MdBookProjectServiceImpl"
+        />
+    </extensions>
 </idea-plugin>

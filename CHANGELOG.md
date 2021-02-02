@@ -4,4 +4,6 @@
 
 ## [Unreleased]
 ### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- Importing `book.toml` files
+- Preventing a user from modifying generated files
+- Run configuration to let user build and open newly created book in a browser
