@@ -7,12 +7,12 @@ import com.intellij.icons.AllIcons
 
 class MdBookCommandConfigurationType : ConfigurationTypeBase(
     "MdBookCommandRunConfiguration",
-    "MdBook",
+    "MdBook Build",
     "MdBook command run configuration",
     AllIcons.Actions.Execute
 ) {
     init {
-        addFactory(MdBookConfigurationFactory(this))
+        addFactory(MdBookBuildConfigurationFactory(this))
     }
 
     val factory: ConfigurationFactory get() = configurationFactories.single()

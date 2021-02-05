@@ -6,4 +6,4 @@
 ### Added
 - Importing `book.toml` files
 - Preventing a user from modifying generated files
-- Run configuration to let user build and open newly created book in a browser
+- Run configurations to let user build and open newly created book in a browser

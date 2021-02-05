@@ -19,6 +19,7 @@ abstract class BaseCommandConfiguration(
 ) : LocatableConfigurationBase<RunProfileState>(project, factory, name),
     RunConfigurationWithSuppressedDefaultDebugAction {
     abstract var command: String
+    abstract var suggestedNameValue: String
 
     var workingDirectory: Path? = Paths.get(
         ExternalizablePath.localPathValue(
@@ -29,14 +30,19 @@ abstract class BaseCommandConfiguration(
         )
     )
 
-    override fun suggestedName(): String = command.substringBefore(' ').capitalize()
+    override fun suggestedName(): String = suggestedNameValue
 
     override fun writeExternal(element: Element) {
         super.writeExternal(element);
         val opt = Element("option")
         opt.setAttribute("name", "command")
         opt.setAttribute("value", command)
-        element.addContent(opt);
+        element.addContent(opt)
+
+        val opt2 = Element("option")
+        opt2.setAttribute("name", "suggestedName")
+        opt2.setAttribute("value", suggestedNameValue)
+        element.addContent(opt2)
 
         val opt1 = Element("option")
         opt1.setAttribute("name", "workingDirectory")
@@ -57,6 +63,9 @@ abstract class BaseCommandConfiguration(
                 when (it.getAttributeValue("name")) {
                     "command" -> {
                         command = attributeValue
+                    }
+                    "suggestedName" -> {
+                        suggestedNameValue = attributeValue
                     }
                     "workingDirectory" -> {
                         workingDirectory = Paths.get(ExternalizablePath.localPathValue(attributeValue))

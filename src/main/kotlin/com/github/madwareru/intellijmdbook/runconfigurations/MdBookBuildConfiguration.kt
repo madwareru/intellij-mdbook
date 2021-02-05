@@ -9,14 +9,13 @@ import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 
-class MdBookCommandConfiguration(
+class MdBookBuildConfiguration(
     project: Project,
     name: String,
     factory: ConfigurationFactory
 ) : BaseCommandConfiguration(project, name, factory) {
     override var command: String = "build --open"
-
-    override fun suggestedName() = "Build And Open In Browser"
+    override var suggestedNameValue = "Build And Open In Browser"
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
         return object : CommandLineState(environment) {
