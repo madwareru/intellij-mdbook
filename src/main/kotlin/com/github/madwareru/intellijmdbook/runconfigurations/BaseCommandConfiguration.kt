@@ -20,6 +20,7 @@ abstract class BaseCommandConfiguration(
     RunConfigurationWithSuppressedDefaultDebugAction {
     abstract var command: String
     abstract var suggestedNameValue: String
+    abstract var info: String
 
     var workingDirectory: Path? = Paths.get(
         ExternalizablePath.localPathValue(
@@ -32,22 +33,33 @@ abstract class BaseCommandConfiguration(
 
     override fun suggestedName(): String = suggestedNameValue
 
-    override fun writeExternal(element: Element) {
-        super.writeExternal(element);
+    private fun writeOption(
+        element: Element,
+        action: (Element) -> Unit
+    ) {
         val opt = Element("option")
-        opt.setAttribute("name", "command")
-        opt.setAttribute("value", command)
+        action(opt)
         element.addContent(opt)
+    }
 
-        val opt2 = Element("option")
-        opt2.setAttribute("name", "suggestedName")
-        opt2.setAttribute("value", suggestedNameValue)
-        element.addContent(opt2)
-
-        val opt1 = Element("option")
-        opt1.setAttribute("name", "workingDirectory")
-        opt1.setAttribute("value", ExternalizablePath.urlValue(workingDirectory.toString()))
-        element.addContent(opt1)
+    override fun writeExternal(element: Element) {
+        super.writeExternal(element)
+        writeOption(element) { opt ->
+            opt.setAttribute("name", "command")
+            opt.setAttribute("value", command)
+        }
+        writeOption(element) { opt ->
+            opt.setAttribute("name", "suggestedName")
+            opt.setAttribute("value", suggestedNameValue)
+        }
+        writeOption(element) { opt ->
+            opt.setAttribute("name", "info")
+            opt.setAttribute("value", info)
+        }
+        writeOption(element) { opt ->
+            opt.setAttribute("name", "workingDirectory")
+            opt.setAttribute("value", ExternalizablePath.urlValue(workingDirectory.toString()))
+        }
     }
 
     override fun readExternal(element: Element) {
@@ -66,6 +78,9 @@ abstract class BaseCommandConfiguration(
                     }
                     "suggestedName" -> {
                         suggestedNameValue = attributeValue
+                    }
+                    "info" -> {
+                        info = attributeValue
                     }
                     "workingDirectory" -> {
                         workingDirectory = Paths.get(ExternalizablePath.localPathValue(attributeValue))

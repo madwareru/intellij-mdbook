@@ -14,8 +14,9 @@ class MdBookBuildConfiguration(
     name: String,
     factory: ConfigurationFactory
 ) : BaseCommandConfiguration(project, name, factory) {
-    override var command: String = "build --open"
-    override var suggestedNameValue = "Build And Open In Browser"
+    override var command: String = BuildCommandChoice.variants[0].command
+    override var suggestedNameValue = BuildCommandChoice.variants[0].suggestedName
+    override var info = BuildCommandChoice.variants[0].description
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
         return object : CommandLineState(environment) {

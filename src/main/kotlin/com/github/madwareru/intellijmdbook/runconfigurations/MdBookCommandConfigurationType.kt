@@ -14,12 +14,5 @@ class MdBookCommandConfigurationType : ConfigurationTypeBase(
     init {
         addFactory(MdBookBuildConfigurationFactory(this))
     }
-
-    val factory: ConfigurationFactory get() = configurationFactories.single()
-
-    companion object {
-        fun getInstance(): MdBookCommandConfigurationType =
-            ConfigurationTypeUtil.findConfigurationType(MdBookCommandConfigurationType::class.java)
-    }
 }
 
