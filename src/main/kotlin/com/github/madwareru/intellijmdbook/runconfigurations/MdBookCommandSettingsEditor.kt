@@ -8,8 +8,12 @@ import com.intellij.ui.layout.panel
 import javax.swing.JComponent
 
 class MdBookCommandSettingsEditor : SettingsEditor<MdBookBuildConfiguration>()  {
-    private val buildActionChoiceBox = ComboBox<String>()
-        .apply { BuildCommandChoice.variants.forEach { addItem(it.command) } }
+    private val buildActionChoiceBox =
+        ComboBox<String>().apply {
+            BuildCommandChoice
+                .variants
+                .forEach { this.addItem(it.command) }
+        }
 
     private val infoText = DescriptionLabel("")
 
