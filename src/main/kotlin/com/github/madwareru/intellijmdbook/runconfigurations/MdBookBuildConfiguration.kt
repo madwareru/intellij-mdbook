@@ -21,6 +21,16 @@ class MdBookBuildConfiguration(
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
         return object : CommandLineState(environment) {
             override fun startProcess(): ProcessHandler {
+                val pathToMdbook = {
+                    val proc = Runtime
+                        .getRuntime()
+                        .exec("which mdbook")
+                    proc.waitFor()
+                    proc.inputStream
+                        .bufferedReader()
+                        .readText()
+                }()
+
                 val wd = ExternalizablePath
                     .urlValue(workingDirectory.toString())
                     .removePrefix("file:")
@@ -28,7 +38,7 @@ class MdBookBuildConfiguration(
                 val cmd = PtyCommandLine()
                     .withUseCygwinLaunch(false)
                     .withWorkDirectory(wd)
-                    .withExePath("~/.cargo/bin/mdbook")
+                    .withExePath(pathToMdbook)
                     .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.NONE)
                     .withParameters(command.split(' '))
 
