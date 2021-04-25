@@ -28,7 +28,7 @@ class MdBookBuildConfiguration(
                 val cmd = PtyCommandLine()
                     .withUseCygwinLaunch(false)
                     .withWorkDirectory(wd)
-                    .withExePath("mdbook")
+                    .withExePath("~/.cargo/bin/mdbook")
                     .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.NONE)
                     .withParameters(command.split(' '))
 
