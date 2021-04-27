@@ -21,15 +21,21 @@ abstract class BaseCommandConfiguration(
     abstract var command: String
     abstract var suggestedNameValue: String
     abstract var info: String
+    abstract var mdBookPath: String
 
-    var workingDirectory: Path? = Paths.get(
-        ExternalizablePath.localPathValue(
-            project
-                .service<MdBookProjectService>()
-                .mdBookProject
-                .workingDirectory
-        )
-    )
+    var workingDirectory: Path? =
+        if (project.service<MdBookProjectService>().mdBookProject == null) {
+            null
+        } else {
+            Paths.get(
+                ExternalizablePath.localPathValue(
+                    project
+                        .service<MdBookProjectService>()
+                        .mdBookProject!!
+                        .workingDirectory
+                )
+            )
+        }
 
     override fun suggestedName(): String = suggestedNameValue
 
@@ -60,6 +66,10 @@ abstract class BaseCommandConfiguration(
             opt.setAttribute("name", "workingDirectory")
             opt.setAttribute("value", ExternalizablePath.urlValue(workingDirectory.toString()))
         }
+        writeOption(element) { opt ->
+            opt.setAttribute("name", "mdBookPath")
+            opt.setAttribute("value", mdBookPath)
+        }
     }
 
     override fun readExternal(element: Element) {
@@ -84,6 +94,9 @@ abstract class BaseCommandConfiguration(
                     }
                     "workingDirectory" -> {
                         workingDirectory = Paths.get(ExternalizablePath.localPathValue(attributeValue))
+                    }
+                    "mdBookPath" -> {
+                        mdBookPath = attributeValue
                     }
                     else -> {}
                 }

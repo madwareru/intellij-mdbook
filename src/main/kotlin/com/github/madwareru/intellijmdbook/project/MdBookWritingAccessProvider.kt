@@ -14,13 +14,13 @@ import com.intellij.openapi.vfs.WritingAccessProvider
 
 class MdBookWritingAccessProvider(private val project: Project) : WritingAccessProvider() {
     override fun requestWriting(vararg files: VirtualFile): Collection<VirtualFile> {
-        val mdBookProject = project.service<MdBookProjectService>().mdBookProject
+        val mdBookProject = project.service<MdBookProjectService>().mdBookProject ?: return ArrayList()
         val buildDir = mdBookProject.buildDirectory
         return files.filter { it.findParent(buildDir) != null }
     }
 
     override fun isPotentiallyWritable(file: VirtualFile): Boolean {
-        val mdBookProject = project.service<MdBookProjectService>().mdBookProject
+        val mdBookProject = project.service<MdBookProjectService>().mdBookProject ?: return true
         val buildDir = mdBookProject.buildDirectory
         return file.findParent(buildDir) == null
     }
@@ -35,7 +35,8 @@ class MdBookTreeStructureProvider(private val project: Project) : TreeStructureP
         val buildDir = project
             .service<MdBookProjectService>()
             .mdBookProject
-            .buildDirectory
+            ?.buildDirectory
+            ?: return children.toList()
         return children
             .filter { child ->
                 val (virtualFile, isDir) = when (child) {

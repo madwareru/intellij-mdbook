@@ -9,7 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile
 
 class MdBookGeneratedSourcesFilter : GeneratedSourcesFilter() {
     override fun isGeneratedSource(file: VirtualFile, project: Project): Boolean {
-        val mdBookProject = project.service<MdBookProjectService>().mdBookProject
+        val mdBookProject = project.service<MdBookProjectService>().mdBookProject ?: return false
         val buildDir = mdBookProject.buildDirectory
         return file.findParent(buildDir) != null
     }

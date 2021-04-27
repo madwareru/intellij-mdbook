@@ -5,6 +5,6 @@ import com.intellij.openapi.project.Project
 
 interface MdBookProjectService {
     val project: Project
-    val mdBookProject: MdBookProject
+    val mdBookProject: MdBookProject?
 }
 

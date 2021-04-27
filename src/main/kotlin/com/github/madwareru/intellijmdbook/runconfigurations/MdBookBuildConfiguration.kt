@@ -17,19 +17,11 @@ class MdBookBuildConfiguration(
     override var command: String = BuildCommandChoice.variants[0].command
     override var suggestedNameValue = BuildCommandChoice.variants[0].suggestedName
     override var info = BuildCommandChoice.variants[0].description
+    override var mdBookPath = ""
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
         return object : CommandLineState(environment) {
             override fun startProcess(): ProcessHandler {
-                val pathToMdbook = {
-                    val proc = Runtime
-                        .getRuntime()
-                        .exec("which mdbook")
-                    proc.waitFor()
-                    proc.inputStream
-                        .bufferedReader()
-                        .readText()
-                }()
 
                 val wd = ExternalizablePath
                     .urlValue(workingDirectory.toString())
@@ -38,7 +30,7 @@ class MdBookBuildConfiguration(
                 val cmd = PtyCommandLine()
                     .withUseCygwinLaunch(false)
                     .withWorkDirectory(wd)
-                    .withExePath(pathToMdbook)
+                    .withExePath(mdBookPath)
                     .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.NONE)
                     .withParameters(command.split(' '))
 
